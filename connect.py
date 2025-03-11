@@ -7,8 +7,8 @@ usr = 'school'
 pswd = 'School1234*'
 try:
     conn = psycopg2.connect(database=name, user=usr, password=pswd, host=hst, port=prt)
-    curs = conn.cursor()
-    curs.execute("addCar('111, 16, vasyutinsky_ryabov_co, blue, githubProject')")
+    with conn as cursor:
+        cursor.execute(open("migrate.sql", "r").read())
 except:
     print('bro ur database does weird shit')
 finally:
