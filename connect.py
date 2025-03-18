@@ -7,7 +7,7 @@ def load(carId):
     return cur.fetchone()
 
 def save(carId, carAge, carModel, carColor, carType):
-    cur.execute(f'INSERT INTO vr.cars (carID, age, model, color, carType, accidentID) VALUES ({carId}, {carAge}, {carModel}, {carColor}, {carType})')
+    cur.execute(f'INSERT INTO vr.cars (carID, age, model, color, carType) VALUES ({carId}, {carAge}, {carModel}, {carColor}, {carType})')
     print('car object saved')
 
 #данные ДБшки
@@ -26,7 +26,7 @@ cur.execute(open("migrate.sql", "r").read())
 
 
 #примеры функций
-save(1, 10, 'porche911', 'blue', 'race')
+save(carId=1, carAge=10, carModel='porche911', carColor='blue', carType='race')
 
 load(1)
 
