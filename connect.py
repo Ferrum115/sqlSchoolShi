@@ -20,14 +20,10 @@ pswd = 'School1234*'
 #соединяемся
 conn = psycopg2.connect(database=name, user=usr, password=pswd, host=hst, port=prt)
 cur = conn.cursor()
-mg_command = ''
-with open("migrate.sql") as f: #мигрируем
-    mg_command = f.read()
 
-with conn.cursor() as curse:
-    for st in mg_command.split(";"):
-        if st.strip():
-            curse.execute(st.strip())
+#мигрируем
+cur.execute(open("migrate.sql", "r").read())
+
 
 #примеры функций
 save(1, 10, 'porche911', 'blue', 'race')
