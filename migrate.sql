@@ -1,4 +1,4 @@
-create schema if not exists vasyutinsky_ryabov;
+create schema if not exists vr;
 
 CREATE TABLE IF NOT EXISTS vr.cars (
   carID INT PRIMARY KEY,
