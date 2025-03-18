@@ -4,10 +4,10 @@ import psycopg2
 
 def load(carId):
     cur.execute(f'SELECT carID={carId} from vr.cars;')
-    return cur.fetchone()
+    print(cur.fetchone())
 
 def save(carId, carAge, carModel, carColor, carType):
-    cur.execute(f'INSERT INTO vr.cars (carID, age, model, color, carType) VALUES ({carId}, {carAge}, {carModel}, {carColor}, {carType})')
+    cur.execute("INSERT INTO vr.cars (carID, age, model, color, carType) VALUES (%s, %s, %s, %s, %s)", (carId, carAge, carModel, carColor, carType))
     print('car object saved')
 
 #данные ДБшки
