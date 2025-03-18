@@ -6,8 +6,8 @@ def load(carId):
     cur.execute(f'SELECT carID={carId} from vr.cars;')
     return cur.fetchone()
 
-def save(carId, carAge, carModel, carColor, carType, accidentId):
-    cur.execute(f'INSERT INTO vr.cars (carID, age, model, color, carType, accidentID) VALUES ({carId}, {carAge}, {carModel}, {carColor}, {carType}, {accidentId})')
+def save(carId, carAge, carModel, carColor, carType):
+    cur.execute(f'INSERT INTO vr.cars (carID, age, model, color, carType, accidentID) VALUES ({carId}, {carAge}, {carModel}, {carColor}, {carType})')
     print('car object saved')
 
 #данные ДБшки
@@ -25,14 +25,14 @@ with open("migrate.sql") as f: #мигрируем
     mg_command = f.read()
 
 with conn.cursor() as curse:
-    for s in mg_command.split(";"):
-        if s.strip():
-            curse.execute(s.strip())
+    for st in mg_command.split(";"):
+        if st.strip():
+            curse.execute(st.strip())
 
 #примеры функций
-save(01, 10, 'porche 911', 'blue', 'race', [])
+save(1, 10, 'porche911', 'blue', 'race')
 
-load(01)
+load(1)
 
 #сохраняем изменения
 conn.commit()

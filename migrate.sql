@@ -6,11 +6,11 @@ CREATE TABLE IF NOT EXISTS vr.cars (
   model TEXT NOT NULL,
   color TEXT NOT NULL,
   carType TEXT NOT NULL,
-  accidentID INT[]
 );
 
 CREATE TABLE IF NOT EXISTS vr.accident (
   ID INT PRIMARY KEY,
   damaged TEXT[] NOT NULL,
   accidentDate DATE NOT NULL
+  accidentCarID INT NOT NULL 
 );
