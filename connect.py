@@ -1,18 +1,102 @@
 import psycopg2
 from fastapi import FastAPI
+import datetime
 import json
 #функции
 
 app = FastAPI()
 
-def load(carId):
-    cur.execute(f'SELECT carID={carId} from vr.cars;')
+
+@app.get("/")
+def root():
+    return {"msg": "im awake and watching"}
+
+#get func
+
+@app.get("/cars/{id}")
+def getCar(id: int):
+    cur.execute(f'SELECT * FROM cars WHERE carID = {id};')
     print(cur.fetchone())
 
-def save(carId, carAge, carModel, carColor, carType):
-    cur.execute("INSERT INTO vr.cars (carID, age, model, color, carType) VALUES (%s, %s, %s, %s, %s)", (carId, carAge, carModel, carColor, carType))
-    print('car object saved')
+@app.get("/cars/{cType}")
+def getCarByType(cType: str):
+    cur.execute(f'SELECT * FROM cars WHERE carType = {cType};')
+    print(cur.fetchone())
 
+@app.get("/cars/{c}")
+def getCarByColor(c: str):
+    cur.execute(f'SELECT * FROM cars WHERE color = {c};')
+    print(cur.fetchone())
+
+@app.get("/cars/{mdl}")
+def getCarByModel(mdl: str):
+    cur.execute(f'SELECT * FROM cars WHERE model = {mdl};')
+    print(cur.fetchone())
+
+@app.get("/cars/{minimum}&{maximum}")
+def getCarByAge(minimum: int, maximum: int):
+    cur.execute(f'SELECT * FROM cars WHERE age BETWEEN {minimum} AND {maximum};')
+    print(cur.fetchone())
+
+#add func
+
+@app.post("/car/{id}&{ag}&{mdl}&{clr}&{typ}")
+def addCar(id: int, ag: int, mdl: str, clr: str, typ: str):
+    cur.execute(f'INSERT INTO cars (carID, age, model, color, carType) VALUES (id, ag, mdl, clr, typ);')
+    return 200
+
+@app.post("/accident/{id}&{carid}&{damage}&{day}")
+def addCar(id: int, carid: int, damage: str, day: datetime.date):
+    cur.execute(f'INSERT INTO accident (ID, damaged, accidentDate) VALUES ({id}, {damage}, {day});')
+    cur.execute(f'insert into a2c (carid, accidentid) values ({carid}, {id});')
+    return 200
+
+#update func
+
+@app.put("/car/{id}&{clr}")
+def updateColor(id: int, clr: str):
+    cur.execute(f'UPDATE cars SET color = {clr} WHERE carID = {id};')
+    return 200
+@app.put("/car/{id}&{newAge}")
+def updateAge(id: int, newAge: int):
+    cur.execute(f' UPDATE cars SET age = {newAge} WHERE carID = {id};')
+    return 200
+@app.put("/accident/{carid}&{accid}")
+def assingAccident(carid: int, accid: int):
+    cur.execute(f'insert into a2c (carid, accidentid) values ({carid}, {accid});')
+    return 200
+
+#delete func
+
+@app.delete("/car/{id}")
+def deleteCar(id: int):
+    cur.execute(f'DELETE FROM cars WHERE carID = {id};')
+    cur.execute(f'delete from a2c where {id} = carid;')
+    return 200
+
+@app.delete("/car/{minimum}&{maximum}")
+def deleteCarByAge(minimum: int, maximum: int):
+    cur.execute(f'DELETE FROM cars WHERE age BETWEEN {minimum} AND {maximum};')
+    cur.execute(f'delete from a2c where (select cars.carID where cars.age between {minimum} and {maximum}) = carid;')
+    return 200
+
+@app.delete("/car/{typ}")
+def deleteCarByType(typ: str):
+    cur.execute(f'DELETE FROM cars WHERE carType = {typ};')
+    cur.execute(f'delete from a2c where (select cars.carID where cars.carType = {typ}) = carid;')
+    return 200
+
+@app.delete("/car/{mdl}")
+def deleteCarByModel(mdl: str):
+    cur.execute(f'DELETE FROM cars WHERE model = {mdl};')
+    cur.execute(f'delete from a2c where (select cars.carID where cars.model = {mdl}) = carid;')
+    return 200
+
+@app.deleteAccident("/accident/{id}")
+def deleteCar(id: int):
+    cur.execute(f'DELETE FROM accident WHERE ID = {id};')
+    cur.execute(f'delete from  a2c where {id} = accidentid;')
+    return 200
 
 
 #данные ДБшки
