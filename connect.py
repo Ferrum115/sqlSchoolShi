@@ -1,6 +1,9 @@
 import psycopg2
-
+from fastapi import FastAPI
+import json
 #функции
+
+app = FastAPI()
 
 def load(carId):
     cur.execute(f'SELECT carID={carId} from vr.cars;')
@@ -9,6 +12,8 @@ def load(carId):
 def save(carId, carAge, carModel, carColor, carType):
     cur.execute("INSERT INTO vr.cars (carID, age, model, color, carType) VALUES (%s, %s, %s, %s, %s)", (carId, carAge, carModel, carColor, carType))
     print('car object saved')
+
+
 
 #данные ДБшки
 hst = '79.174.88.238'
