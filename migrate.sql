@@ -10,9 +10,9 @@ CREATE TABLE IF NOT EXISTS vr.cars (
 
 
 create table if not exists vr.a2c(
-  carid references cars.carID
-  accidentid references accident.ID
-)
+  carid int references vr.cars (carID),
+  accidentid int references vr.accident (ID)
+);
 
 CREATE TABLE IF NOT EXISTS vr.accident (
   ID INT PRIMARY KEY,

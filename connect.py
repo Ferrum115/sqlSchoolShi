@@ -1,7 +1,6 @@
 import psycopg2
 from fastapi import FastAPI
 from fastapi.encoders import jsonable_encoder
-from datetime import datetime
 import json
 #функции
 
@@ -46,11 +45,11 @@ def addCar(id: int, ag: int, mdl: str, clr: str, typ: str):
     cur.execute(f'INSERT INTO cars (carID, age, model, color, carType) VALUES (id, ag, mdl, clr, typ);')
     return 200
 
-# @app.post("/add/accident/{id}&{carid}&{damage}&{day}")
-# def addAccident(id: int, carid: int, damage: str, day: datetime.date):
-#     cur.execute(f'INSERT INTO accident (ID, damaged, accidentDate) VALUES ({id}, {damage}, {day});')
-#     cur.execute(f'insert into a2c (carid, accidentid) values ({carid}, {id});')
-#     return 200
+@app.post("/add/accident/{id}&{carid}&{damage}&{day}")
+def addAccident(id: int, carid: int, damage: str, day: int):
+    cur.execute(f'INSERT INTO accident (ID, damaged, accidentDate) VALUES ({id}, {damage}, {day});')
+    cur.execute(f'insert into a2c (carid, accidentid) values ({carid}, {id});')
+    return 200
 
 #update func
 
