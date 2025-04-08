@@ -113,12 +113,6 @@ cur = conn.cursor()
 #мигрируем
 cur.execute(open("migrate.sql", "r").read())
 
-
-#примеры функций
-save(carId=1, carAge=10, carModel='porche911', carColor='blue', carType='race')
-
-load(1)
-
 #сохраняем изменения
 conn.commit()
 
