@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS vr.cars (
 
 
 create table if not exists vr.a2c(
-  carid references cars.ID
+  carid references cars.carID
   accidentid references accident.ID
 )
 
