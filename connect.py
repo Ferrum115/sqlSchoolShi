@@ -31,7 +31,7 @@ async def root():
 @app.get("/get/cars/{id}")
 async def getCar(id: int):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE carID = {id};')
-    return json.dumps(jsonable_encoder(r))
+    return json.dumps(jsonable_encoder(cur.execute(f'SELECT * FROM vr.cars WHERE carID = {id};')))
 
 @app.get("/get/cars/{cType}")
 async def getCarByType(cType: str):
