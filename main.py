@@ -1,7 +1,7 @@
 import psycopg2
 import uvicorn
 from fastapi import FastAPI
-from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 import json
 #функции
 
@@ -31,30 +31,30 @@ async def root():
 
 #get func
 
-@app.get('/get/cars/')
+@app.get('/get/cars/byID/')
 async def getCar(id: int):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE carID = {id};')
-    return json.dumps(jsonable_encoder(r))
+    return JSONResponse(r)
 
-@app.get('/get/cars/')
+@app.get('/get/cars/byType/')
 async def getCarByType(cType: str):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE carType = {cType};')
-    json.dumps(jsonable_encoder(r))
+    return JSONResponse(r)
 
-@app.get('/get/cars/')
+@app.get('/get/cars/byColor/')
 async def getCarByColor(c: str):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE color = {c};')
-    json.dumps(jsonable_encoder(r))
+    return JSONResponse(r)
 
-@app.get('/get/cars/')
+@app.get('/get/cars/byModel/')
 async def getCarByModel(mdl: str):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE model = {mdl};')
-    json.dumps(jsonable_encoder(r))
+    return JSONResponse(r)
 
-@app.get('/get/cars/')
+@app.get('/get/cars/byAge/')
 async def getCarByAge(minimum: int, maximum: int):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
-    json.dumps(jsonable_encoder(r))
+    return JSONResponse(r)
 
 #add func
 
@@ -73,12 +73,12 @@ async def addAccident(id: int, carid: int, damage: str, day: int):
 
 #update func
 
-@app.put('/upd/car/')
+@app.put('/upd/car/color/')
 async def updateColor(id: int, clr: str):
     cur.execute(f'UPDATE vr.cars SET color = {clr} WHERE carID = {id};')
     conn.commit()
     return 200
-@app.put('/upd/car/')
+@app.put('/upd/car/age/')
 async def updateAge(id: int, newAge: int):
     cur.execute(f' UPDATE vr.cars SET age = {newAge} WHERE carID = {id};')
     conn.commit()
@@ -91,28 +91,28 @@ async def assingAccident(carid: int, accid: int):
 
 #delete func
 
-@app.delete('/rem/car/')
+@app.delete('/rem/car/byID/')
 async def deleteCar(id: int):
     cur.execute(f'DELETE FROM cars WHERE carID = {id};')
     cur.execute(f'delete from a2c where {id} = carid;')
     conn.commit()
     return 200
 
-@app.delete('/rem/car/')
+@app.delete('/rem/car/byAge/')
 async def deleteCarByAge(minimum: int, maximum: int):
     cur.execute(f'DELETE FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.age between {minimum} and {maximum}) = carid;')
     conn.commit()
     return 200
 
-@app.delete('/rem/car/')
+@app.delete('/rem/car/byType/')
 async def deleteCarByType(typ: str):
     cur.execute(f'DELETE FROM vr.cars WHERE carType = {typ};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.carType = {typ}) = carid;')
     conn.commit()
     return 200
 
-@app.delete('/rem/car/')
+@app.delete('/rem/car/byModel/')
 async def deleteCarByModel(mdl: str):
     cur.execute(f'DELETE FROM vr.cars WHERE model = {mdl};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.model = {mdl}) = carid;')
