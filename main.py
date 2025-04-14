@@ -17,111 +17,113 @@ pswd = 'School1234*'
 #соединяемся
 conn = psycopg2.connect(database=name, user=usr, password=pswd, host=hst, port=prt)
 cur = conn.cursor()
+conn.autocommit = True
+
 
 #мигрируем
 cur.execute(open("migrate.sql", "r").read())
 print("[connection established]")
 
 
-@app.get("/")
+@app.get('/')
 async def root():
     return {"msg": "im awake and watching"}
 
 #get func
 
-@app.get("/get/cars/{id}")
+@app.get('/get/cars/')
 async def getCar(id: int):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE carID = {id};')
     return json.dumps(jsonable_encoder(r))
 
-@app.get("/get/cars/{cType}")
+@app.get('/get/cars/')
 async def getCarByType(cType: str):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE carType = {cType};')
     json.dumps(jsonable_encoder(r))
 
-@app.get("/get/cars/{c}")
+@app.get('/get/cars/')
 async def getCarByColor(c: str):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE color = {c};')
     json.dumps(jsonable_encoder(r))
 
-@app.get("/get/cars/{mdl}")
+@app.get('/get/cars/')
 async def getCarByModel(mdl: str):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE model = {mdl};')
     json.dumps(jsonable_encoder(r))
 
-@app.get("/get/cars/{minimum}&{maximum}")
+@app.get('/get/cars/')
 async def getCarByAge(minimum: int, maximum: int):
     r = cur.execute(f'SELECT * FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
     json.dumps(jsonable_encoder(r))
 
 #add func
 
-@app.post("/add/car/{id}&{ag}&{mdl}&{clr}&{typ}")
+@app.post('/add/car/')
 async def addCar(id: int, ag: int, mdl: str, clr: str, typ: str):
     cur.execute(f'INSERT INTO vr.cars (carID, age, model, color, carType) VALUES ({id}, {ag}, {mdl}, {clr}, {typ});')
-    cur.commit()
+    conn.commit()
     return 200
 
-@app.post("/add/accident/{id}&{carid}&{damage}&{day}")
+@app.post('/add/accident/')
 async def addAccident(id: int, carid: int, damage: str, day: int):
     cur.execute(f'INSERT INTO vr.accident (ID, damaged, accidentDate) VALUES ({id}, {damage}, {day});')
     cur.execute(f'insert into vr.a2c (carid, accidentid) values ({carid}, {id});')
-    cur.commit()
+    conn.commit()
     return 200
 
 #update func
 
-@app.put("/upd/car/{id}&{clr}")
+@app.put('/upd/car/')
 async def updateColor(id: int, clr: str):
     cur.execute(f'UPDATE vr.cars SET color = {clr} WHERE carID = {id};')
-    cur.commit()
+    conn.commit()
     return 200
-@app.put("/upd/car/{id}&{newAge}")
+@app.put('/upd/car/')
 async def updateAge(id: int, newAge: int):
     cur.execute(f' UPDATE vr.cars SET age = {newAge} WHERE carID = {id};')
-    cur.commit()
+    conn.commit()
     return 200
-@app.put("/upd/accident/{carid}&{accid}")
+@app.put('/upd/accident/')
 async def assingAccident(carid: int, accid: int):
     cur.execute(f'insert into vr.a2c (carid, accidentid) values ({carid}, {accid});')
-    cur.commit()
+    conn.commit()
     return 200
 
 #delete func
 
-@app.delete("/rem/car/{id}")
+@app.delete('/rem/car/')
 async def deleteCar(id: int):
     cur.execute(f'DELETE FROM cars WHERE carID = {id};')
     cur.execute(f'delete from a2c where {id} = carid;')
-    cur.commit()
+    conn.commit()
     return 200
 
-@app.delete("/rem/car/{minimum}&{maximum}")
+@app.delete('/rem/car/')
 async def deleteCarByAge(minimum: int, maximum: int):
     cur.execute(f'DELETE FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.age between {minimum} and {maximum}) = carid;')
-    cur.commit()
+    conn.commit()
     return 200
 
-@app.delete("/rem/car/{typ}")
+@app.delete('/rem/car/')
 async def deleteCarByType(typ: str):
     cur.execute(f'DELETE FROM vr.cars WHERE carType = {typ};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.carType = {typ}) = carid;')
-    cur.commit()
+    conn.commit()
     return 200
 
-@app.delete("/rem/car/{mdl}")
+@app.delete('/rem/car/')
 async def deleteCarByModel(mdl: str):
     cur.execute(f'DELETE FROM vr.cars WHERE model = {mdl};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.model = {mdl}) = carid;')
-    cur.commit()
+    conn.commit()
     return 200
 
-@app.delete("/rem/accident/{id}")
+@app.delete('/rem/accident/')
 async def deleteAccident(id: int):
     cur.execute(f'DELETE FROM vr.accident WHERE ID = {id};')
     cur.execute(f'delete from vr.a2c where {id} = accidentid;')
-    cur.commit()
+    conn.commit()
     return 200
 
 if __name__ == '__main__':
@@ -129,7 +131,7 @@ if __name__ == '__main__':
 
 
 # #сохраняем изменения
-# cur.commit()
+# conn.commit()
 
 # #закрываем соединение
         
