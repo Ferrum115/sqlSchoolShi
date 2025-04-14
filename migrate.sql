@@ -8,14 +8,14 @@ CREATE TABLE IF NOT EXISTS vr.cars (
   carType TEXT NOT NULL
 );
 
-
-create table if not exists vr.a2c(
-  carid int references vr.cars (carID),
-  accidentid int references vr.accident (ID)
-);
-
 CREATE TABLE IF NOT EXISTS vr.accident (
   ID INT PRIMARY KEY,
   damaged TEXT NOT NULL,
   accidentDate DATE NOT NULL
+);
+
+
+create table if not exists vr.a2c(
+  carid int references vr.cars (carID),
+  accidentid int references vr.accident (ID)
 );
