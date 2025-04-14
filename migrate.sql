@@ -16,6 +16,6 @@ create table if not exists vr.a2c(
 
 CREATE TABLE IF NOT EXISTS vr.accident (
   ID INT PRIMARY KEY,
-  damaged TEXT[] NOT NULL,
+  damaged TEXT NOT NULL,
   accidentDate DATE NOT NULL
 );

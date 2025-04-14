@@ -2,7 +2,6 @@ import psycopg2
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-import json
 #функции
 
 app = FastAPI()
@@ -33,27 +32,32 @@ async def root():
 
 @app.get('/get/cars/byID/')
 async def getCar(id: int):
-    r = cur.execute(f'SELECT * FROM vr.cars WHERE carID = {id};')
+    cur.execute(f'SELECT * FROM vr.cars WHERE carID = {id};')
+    r = cur.fetchall()
     return JSONResponse(r)
 
 @app.get('/get/cars/byType/')
 async def getCarByType(cType: str):
-    r = cur.execute(f'SELECT * FROM vr.cars WHERE carType = {cType};')
+    cur.execute(f'SELECT * FROM vr.cars WHERE carType = {cType};')
+    r = cur.fetchall()
     return JSONResponse(r)
 
 @app.get('/get/cars/byColor/')
 async def getCarByColor(c: str):
-    r = cur.execute(f'SELECT * FROM vr.cars WHERE color = {c};')
+    cur.execute(f'SELECT * FROM vr.cars WHERE color = {c};')
+    r = cur.fetchall()
     return JSONResponse(r)
 
 @app.get('/get/cars/byModel/')
 async def getCarByModel(mdl: str):
-    r = cur.execute(f'SELECT * FROM vr.cars WHERE model = {mdl};')
+    cur.execute(f'SELECT * FROM vr.cars WHERE model = {mdl};')
+    r = cur.fetchall()
     return JSONResponse(r)
 
 @app.get('/get/cars/byAge/')
 async def getCarByAge(minimum: int, maximum: int):
-    r = cur.execute(f'SELECT * FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
+    cur.execute(f'SELECT * FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
+    r = cur.fetchall()
     return JSONResponse(r)
 
 #add func
@@ -93,8 +97,8 @@ async def assingAccident(carid: int, accid: int):
 
 @app.delete('/rem/car/byID/')
 async def deleteCar(id: int):
-    cur.execute(f'DELETE FROM cars WHERE carID = {id};')
-    cur.execute(f'delete from a2c where {id} = carid;')
+    cur.execute(f'DELETE FROM vr.cars WHERE carID = {id};')
+    cur.execute(f'delete from vr.a2c where {id} = carid;')
     conn.commit()
     return 200
 
@@ -128,12 +132,3 @@ async def deleteAccident(id: int):
 
 if __name__ == '__main__':
     uvicorn.run(app, host="127.0.0.1", port=9650)
-
-
-# #сохраняем изменения
-# conn.commit()
-
-# #закрываем соединение
-        
-# cur.close()
-# conn.close()
