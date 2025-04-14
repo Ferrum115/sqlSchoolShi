@@ -113,6 +113,8 @@ cur = conn.cursor()
 #мигрируем
 cur.execute(open("migrate.sql", "r").read())
 
+
+
 #сохраняем изменения
 conn.commit()
 
