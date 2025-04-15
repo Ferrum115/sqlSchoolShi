@@ -104,36 +104,36 @@ async def assingAccident(carid: int, accid: int):
 
 @app.delete('/rem/car/byID/')
 async def deleteCar(id: int):
-    cur.execute(f'DELETE FROM vr.cars WHERE carID = {id};')
     cur.execute(f'delete from vr.a2c where {id} = carid;')
+    cur.execute(f'DELETE FROM vr.cars WHERE carID = {id};')
     conn.commit()
     return 200
 
 @app.delete('/rem/car/byAge/')
 async def deleteCarByAge(minimum: int, maximum: int):
-    cur.execute(f'DELETE FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.age between {minimum} and {maximum}) = carid;')
+    cur.execute(f'DELETE FROM vr.cars WHERE age BETWEEN {minimum} AND {maximum};')
     conn.commit()
     return 200
 
 @app.delete('/rem/car/byType/')
 async def deleteCarByType(typ: str):
-    cur.execute(f'DELETE FROM vr.cars WHERE carType = {typ};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.carType = {typ}) = carid;')
+    cur.execute(f'DELETE FROM vr.cars WHERE carType = {typ};')
     conn.commit()
     return 200
 
 @app.delete('/rem/car/byModel/')
 async def deleteCarByModel(mdl: str):
-    cur.execute(f'DELETE FROM vr.cars WHERE model = {mdl};')
     cur.execute(f'delete from vr.a2c where (select cars.carID where cars.model = {mdl}) = carid;')
+    cur.execute(f'DELETE FROM vr.cars WHERE model = {mdl};')
     conn.commit()
     return 200
 
 @app.delete('/rem/accident/')
 async def deleteAccident(id: int):
-    cur.execute(f'DELETE FROM vr.accident WHERE ID = {id};')
     cur.execute(f'delete from vr.a2c where {id} = accidentid;')
+    cur.execute(f'DELETE FROM vr.accident WHERE ID = {id};')
     conn.commit()
     return 200
 
