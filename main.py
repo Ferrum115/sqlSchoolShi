@@ -94,11 +94,6 @@ async def updateAge(id: int, newAge: int):
     cur.execute(f' UPDATE vr.cars SET age = {newAge} WHERE carID = {id};')
     conn.commit()
     return 200
-@app.put('/upd/accident/')
-async def assingAccident(carid: int, accid: int):
-    cur.execute(f'insert into vr.a2c (carid, accidentid) values ({carid}, {accid});')
-    conn.commit()
-    return 200
 
 #delete func
 
