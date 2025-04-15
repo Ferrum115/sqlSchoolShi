@@ -1,5 +1,6 @@
 import psycopg2
 import uvicorn
+import datetime
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 #функции
@@ -60,6 +61,12 @@ async def getCarByAge(minimum: int, maximum: int):
     r = cur.fetchall()
     return JSONResponse(r)
 
+@app.get('/get/accidents/')
+async def getAccidents():
+    cur.execute(f'SELECT damaged, carid FROM vr.accident INNER JOIN vr.a2c ON accidentid = ID ORDER BY vr.accident.accidentDate ASC;')
+    r = cur.fetchall()
+    return JSONResponse(r)
+
 #add func
 
 @app.post('/add/car/')
@@ -69,8 +76,8 @@ async def addCar(id: int, ag: int, mdl: str, clr: str, typ: str):
     return 200
 
 @app.post('/add/accident/')
-async def addAccident(id: int, carid: int, damage: str, day: int):
-    cur.execute(f'INSERT INTO vr.accident (ID, damaged, accidentDate) VALUES ({id}, {damage}, {day});')
+async def addAccident(id: int, carid: int, damage: str):
+    cur.execute(f'INSERT INTO vr.accident (ID, damaged, accidentDate) VALUES ({id}, {damage}, \'{str(datetime.date.today())}\');')
     cur.execute(f'insert into vr.a2c (carid, accidentid) values ({carid}, {id});')
     conn.commit()
     return 200
