@@ -16,6 +16,6 @@ CREATE TABLE IF NOT EXISTS vasyutinsky_ryabov.accident (
 
 
 create table if not exists vasyutinsky_ryabov.a2c(
-  carid int references vr.cars (carID),
-  accidentid int references vr.accident (ID)
+  carid int references vasyutinsky_ryabov.cars (carID),
+  accidentid int references vasyutinsky_ryabov.accident (ID)
 );
