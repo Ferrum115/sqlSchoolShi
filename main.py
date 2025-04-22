@@ -139,11 +139,11 @@ async def deleteAccident(id: int):
     return 200
 
 # [DANGER ZONE: TESTING ONLY]
-@app.delete('/dropall')
-async def deleteAccident(id: int):
-    cur.execute(f'truncate table vasyutinsky_ryabov.a2c')
-    cur.execute(f'truncate table vasyutinsky_ryabov.cars')
-    cur.execute(f'truncate table vasyutinsky_ryabov.accident')
+@app.delete('/clearall')
+async def deleteAll():
+    cur.execute(f'TRUNCATE TABLE vasyutinsky_ryabov.a2c CASCADE;')
+    cur.execute(f'TRUNCATE TABLE vasyutinsky_ryabov.cars CASCADE;')
+    cur.execute(f'TRUNCATE TABLE vasyutinsky_ryabov.accident CASCADE;')
     conn.commit()
     return 200
 

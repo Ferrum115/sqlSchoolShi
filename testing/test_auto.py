@@ -7,7 +7,7 @@ from main import app
 client = TestClient(app)
 
 def test_clear_table():
-    response = client.delete("/dropall")
+    response = client.delete("/clearall")
     assert response.status_code == 200
 
 def test_add_func():
