@@ -6,6 +6,10 @@ from main import app
 
 client = TestClient(app)
 
+def test_clear_table():
+    response = client.delete("/dropall")
+    assert response.status_code == 200
+
 def test_add_func():
     response = client.post("/add/car/?id=10&ag=10&mdl='sport'&clr='blu'&typ='yay'")
     assert response.status_code == 200
@@ -14,7 +18,7 @@ def test_add_func():
 def test_get_func():
     response = client.get("/get/cars/byID/?id=10")
     assert response.status_code == 200
-    assert response.json() == {"carID": "10", "age": "10", "model": "sport", "color": "blu", "type": "yay"}
+    assert response.json() == [[10, 10, 'sport', 'blu', 'yay']]
 
 def test_put_func():
     response = client.put("/upd/car/color/?id=10&clr='red'")

@@ -34,6 +34,7 @@ print("[connection established]")
 async def root():
     return {"msg": "im awake and watching"}
 
+
 #get func
 
 @app.get('/get/cars/byID/')
@@ -134,6 +135,15 @@ async def deleteCarByModel(mdl: str):
 async def deleteAccident(id: int):
     cur.execute(f'delete from vasyutinsky_ryabov.a2c where {id} = accidentid;')
     cur.execute(f'DELETE FROM vasyutinsky_ryabov.accident WHERE ID = {id};')
+    conn.commit()
+    return 200
+
+# [DANGER ZONE: TESTING ONLY]
+@app.delete('/dropall')
+async def deleteAccident(id: int):
+    cur.execute(f'truncate table vasyutinsky_ryabov.a2c')
+    cur.execute(f'truncate table vasyutinsky_ryabov.cars')
+    cur.execute(f'truncate table vasyutinsky_ryabov.accident')
     conn.commit()
     return 200
 
