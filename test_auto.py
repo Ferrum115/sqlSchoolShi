@@ -25,6 +25,10 @@ def read_put_func_test():
     assert response.status_code == 200
 
 def read_del_func_test():
-    response = client.delete("/rem/car/byID/")
+    response = client.delete("/rem/car/byID/?id=10")
     assert response.status_code == 200
 
+def test_nonexistent_item():
+    response = client.get("/get/cars/848")
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Item not found"}
