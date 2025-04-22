@@ -3,7 +3,10 @@ import uvicorn
 import datetime
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from fastapi.testclient import TestClient
 
+
+# setup region
 
 app = FastAPI()
 
@@ -24,6 +27,8 @@ conn.autocommit = True
 cur.execute(open("migrate.sql", "r").read())
 print("[connection established]")
 
+
+# functions region
 
 @app.get('/')
 async def root():
@@ -131,6 +136,8 @@ async def deleteAccident(id: int):
     cur.execute(f'DELETE FROM vasyutinsky_ryabov.accident WHERE ID = {id};')
     conn.commit()
     return 200
+
+# run
 
 if __name__ == '__main__':
     uvicorn.run(app, host="127.0.0.1", port=9650)
