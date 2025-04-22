@@ -7,7 +7,7 @@ from main import app
 client = TestClient(app)
 
 def test_add_func():
-    response = client.post('/add/cars/byID/?id=10&ag=10&mdl=sport&clr=blu&typ=yay')
+    response = client.post("/add/cars/byID/?id=10&ag=10&mdl='sport'&clr='blu'&typ='yay'")
     assert response.status_code == 200
 
 
@@ -21,7 +21,7 @@ def test_get_func():
                                "type": "yay"}
 
 def test_put_func():
-    response = client.put("/upd/car/color/?id=10&clr=red")
+    response = client.put("/upd/car/color/?id=10&clr='red'")
     assert response.status_code == 200
 
 def test_del_func():
@@ -29,6 +29,6 @@ def test_del_func():
     assert response.status_code == 200
 
 def test_nonexistent_item():
-    response = client.get("/get/cars/848")
+    response = client.get("/get/cars/?id=848")
     assert response.status_code == 404
-    assert response.json() == {"detail": "Item not found"}
+    assert response.json() == {'detail': 'Not Found'}
